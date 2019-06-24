@@ -53,7 +53,7 @@ class App extends Component {
       }else{
         MovieLast = MovieNameList.splice(-3).join(', ') + '...';
       }
-      console.log("MOVIELAST ===>",MovieLast)
+      // console.log("MOVIELAST ===>",MovieLast)
 
     var MovieData=[{name : "L'Odyssée de Pi",
                     desc: "Après que leur bateau est victime d'une violente tempête et coule au fond du Pacifique, un adolescent et un tigre du Bengale …",
@@ -81,11 +81,11 @@ class App extends Component {
       
       <div style={{flex:1}}>
 
-        <Row style={{flex:1, color:'white', backgroundColor:'#f39c12',alignItems:"center", paddingLeft:15, borderBottom:'1px solid #8e44ad'}}>
-        <FontAwesomeIcon size="3x"  style={{marginLeft:15}} icon={faFilm}/>
-        <a href="#" style={{color:"#FFF", marginLeft:15, alignContent:'center'}}>Last Releases</a>
-        <a href="#" style={{color:"#FFF", marginLeft:15}}>My Movies</a>
-        <Button id="Popover1" type="button" style={{marginLeft:15,backgroundColor:'#8e44ad',borderColor:'#8e44ad'}}>{MovieCount} {MovieCount>1 ? 'Films' : 'Film'} </Button>
+        <Row style={styles.rowHeader}>
+        <FontAwesomeIcon size="3x"  style={styles.iconHeader} icon={faFilm}/>
+        <a href="#" style={styles.link}>Last Releases</a>
+        <a href="#" style={styles.link}>My Movies</a>
+        <Button id="Popover1"  style={styles.buttonHeader}>{MovieCount} {MovieCount>1 ? 'Films' : 'Film'} </Button>
         <Popover placement="right" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
           <PopoverHeader>Mes Films</PopoverHeader>
           <PopoverBody>{MovieLast}</PopoverBody>
@@ -103,5 +103,27 @@ class App extends Component {
   }
 }
 
+const styles = {
+  rowHeader:{
+    flex:1,
+    color:'white', 
+    backgroundColor:'#f39c12',
+    alignItems:"center", paddingLeft:15, 
+    borderBottom:'1px solid #8e44ad'
+  },
+  iconHeader:{
+    marginLeft:15
+  },
+  link:{
+    color:"#FFF", 
+    marginLeft:15
+  },
+  buttonHeader:{
+    marginLeft:15,
+    backgroundColor:'#8e44ad',
+    borderColor:'#8e44ad'
+  },
+
+};
 
 export default App;
