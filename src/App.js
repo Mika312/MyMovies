@@ -6,7 +6,6 @@ import {
   PopoverHeader,
   PopoverBody,
   Container,
-  Col
    } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -34,11 +33,49 @@ class App extends Component {
 
   render(){
 
+    var MovieNameList= [
+                        "L'Odyssée de Pi",
+                        "Maléfique", 
+                        "Les Aventures de Tintin",
+                        "L'Odyssée de Pi",
+                        "Maléfique", 
+                        "Les Aventures de Tintin",
+                      ];
+
+    var MovieCount= MovieNameList.length;
+
+    var MovieLast
+
+    if (MovieNameList.length === 0){
+      MovieLast = "Tu n'as aucun Film preferé"
+    }else if  (MovieNameList.length <= 3){
+      MovieLast = MovieNameList.join(', ')
+      }else{
+        MovieLast = MovieNameList.splice(-3).join(', ') + '...';
+      }
+      console.log("MOVIELAST ===>",MovieLast)
+
+    var MovieData=[{name : "L'Odyssée de Pi",
+                    desc: "Après que leur bateau est victime d'une violente tempête et coule au fond du Pacifique, un adolescent et un tigre du Bengale …",
+                    img : "/pi.jpg"
+                   },
+                   {name : "Maléfique",
+                    desc: "Poussée par la vengeance et une volonté farouche de protéger les terres qu'elle préside, Maléfique place ...",
+                    img : " /malefique.jpg"
+                   },
+                   {name : "Les Aventures de Tintin",
+                    desc: "Parce qu'il achète la maquette d'un bateau appelé la Licorne, Tintin, un jeune reporter, se retrouve entraîné dans une fantastique aventure...",
+                    img : "/tintin.jpg"
+                   },
+                  ]
+
     var MovieList=[];
 
-    for(var i = 0; i < 20; i++){
-      MovieList.push(<Movie key={i}/>);
+    for(var i = 0; i < MovieData.length; i++){
+      MovieList.push(<Movie MovieName={MovieData[i].name} MovieDesc={MovieData[i].desc} MovieImg={MovieData[i].img} key={i}/>);
     }
+
+
 
     return (
       
@@ -48,10 +85,10 @@ class App extends Component {
         <FontAwesomeIcon size="3x"  style={{marginLeft:15}} icon={faFilm}/>
         <a href="#" style={{color:"#FFF", marginLeft:15, alignContent:'center'}}>Last Releases</a>
         <a href="#" style={{color:"#FFF", marginLeft:15}}>My Movies</a>
-        <Button id="Popover1" type="button" style={{marginLeft:15,backgroundColor:'#8e44ad',borderColor:'#8e44ad'}}>0 Film</Button>
+        <Button id="Popover1" type="button" style={{marginLeft:15,backgroundColor:'#8e44ad',borderColor:'#8e44ad'}}>{MovieCount} {MovieCount>1 ? 'Films' : 'Film'} </Button>
         <Popover placement="right" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
-          <PopoverHeader>Film</PopoverHeader>
-          <PopoverBody>Titre de Film</PopoverBody>
+          <PopoverHeader>Mes Films</PopoverHeader>
+          <PopoverBody>{MovieLast}</PopoverBody>
         </Popover>
         </Row>
 
