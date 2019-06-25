@@ -12,15 +12,19 @@ class Movie extends Component {
         super();
         this.handleClick = this.handleClick.bind(this);
 
-        this.state = { like: false };
+        this.state = { 
+            like: false,
+        };
     }
 
 
     handleClick(){
-        console.log("click détécté");
-        console.log("STATE LIKE ===>",this.state.like)
+        // console.log("click détécté");
+        // console.log("STATE LIKE ===>",this.state.like);
+        
+        this.props.handleClickParent(!this.state.like,this.props.MovieName)
         this.setState ({
-            like : !this.state.like        
+            like : !this.state.like,
         })
       }
 

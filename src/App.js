@@ -18,12 +18,15 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.handleClick =  this.handleClick.bind(this)
     this.handleClickOn = this.handleClickOn.bind(this);
     this.handleClickOff = this.handleClickOff.bind(this);
     this.toggle = this.toggle.bind(this);
     this.state = {
       popoverOpen: false,
       viewOnlyLike:false,
+      MoviesCount : 0,
+      MovieNameList : [],
     };
   }
 
@@ -36,45 +39,68 @@ class App extends Component {
 
 
 handleClickOn(){
-    console.log("click détécté on");
+    // console.log("click détécté on");
     this.setState ({
       viewOnlyLike:true
     })
-  }
+  };
 
   handleClickOff(){
-    console.log("click détécté off");
+    // console.log("click détécté off");
     this.setState ({
       viewOnlyLike:false
     })
 
-  }
+  };
 
+
+  handleClick(isLike,name){
+    // console.log("Click deteté Like");
+    console.log("STATE MOVIECOUNT ===>",this.state.MoviesCount)
+    console.log("ISLIKE===>",isLike)
+    console.log("NAME===>",name)
+
+    var MovieNameListCopy = this.state.MovieNameList.concat();
+    if(isLike){
+      MovieNameListCopy.push(name);
+    this.setState ({
+      MoviesCount : this.state.MoviesCount + 1,
+      MovieNameList : MovieNameListCopy
+    })
+    }else{
+      var index = MovieNameListCopy.indexOf(name);
+      MovieNameListCopy.splice(index, 1);
+    this.setState ({
+      MoviesCount : this.state.MoviesCount - 1,
+      MovieNameList : MovieNameListCopy
+    })
+    }
+  }
 
 
   render(){
 
-    var MovieNameList= [
-                        "L'Odyssée de Pi",
-                        "Maléfique", 
-                        "Les Aventures de Tintin",
-                        "L'Odyssée de Pi",
-                        "Maléfique", 
-                        "Les Aventures de Tintin",
-                      ];
+    // var MovieNameList= [
+    //                     "L'Odyssée de Pi",
+    //                     "Maléfique", 
+    //                     "Les Aventures de Tintin",
+    //                     "L'Odyssée de Pi",
+    //                     "Maléfique", 
+    //                     "Les Aventures de Tintin",
+    //                   ];
 
-    var MovieCount= MovieNameList.length;
+    // var MovieCount= MovieNameList.length;
 
     var MovieLast
 
-    if (MovieNameList.length === 0){
+    if (this.state.MovieNameList.length === 0){
       MovieLast = "Tu n'as aucun Film preferé"
-    }else if  (MovieNameList.length <= 3){
-      MovieLast = MovieNameList.join(', ')
-      }else{
-        MovieLast = MovieNameList.splice(-3).join(', ') + '...';
-      }
-      // console.log("MOVIELAST ===>",MovieLast)
+    }else if  (this.state.MovieNameList.length <= 3){
+      MovieLast = this.state.MovieNameList.join(', ')
+    }else{
+      MovieLast = this.state.MovieNameList.splice(-3).join(', ') + '...';
+    }
+      console.log("MOVIELAST ===>",MovieLast)
 
     var MovieData=[{name : "L'Odyssée de Pi",
                     desc: "Après que leur bateau est victime d'une violente tempête et coule au fond du Pacifique, un adolescent et un tigre du Bengale …",
@@ -129,7 +155,7 @@ handleClickOn(){
     var MovieList=[];
 
     for(var i = 0; i < MovieData.length; i++){
-      MovieList.push(<Movie MovieName={MovieData[i].name} MovieDesc={MovieData[i].desc} MovieImg={MovieData[i].img} displayOnlyLike={this.state.viewOnlyLike} key={i}/>);
+      MovieList.push(<Movie MovieName={MovieData[i].name} MovieDesc={MovieData[i].desc} MovieImg={MovieData[i].img} displayOnlyLike={this.state.viewOnlyLike} handleClickParent={this.handleClick} key={i}/>);
     }
 
     var link= {
@@ -180,7 +206,7 @@ handleClickOn(){
         <FontAwesomeIcon size="3x"  style={styles.iconHeader} icon={faFilm}/>
         <a onClick={this.handleClickOff} href="#" style={link}>Last Releases</a>
         <a onClick={this.handleClickOn} href="#" style={link2}>My Movies</a>
-        <Button id="Popover1"  style={styles.buttonHeader}>{MovieCount} {MovieCount>1 ? 'Films' : 'Film'} </Button>
+        <Button id="Popover1"  style={styles.buttonHeader}>{this.state.MoviesCount} {this.state.MoviesCount>1 ? 'Films' : 'Film'} </Button>
         <Popover placement="right" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
           <PopoverHeader>Mes Films</PopoverHeader>
           <PopoverBody>{MovieLast}</PopoverBody>
