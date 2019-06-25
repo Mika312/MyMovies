@@ -26,14 +26,66 @@ class Movie extends Component {
 
 
     render(){
+
+        var heartColor;
+
+        if(this.state.like){
+            heartColor = '#e74c3c';
+        }else if(!this.state.like) {
+            heartColor = '#2c3e50';
+        }
+
+        var card = {
+            display :'',
+            flex:1,
+            marginTop:20
+          }
+    
+          if (!this.state.like  && this.props.displayOnlyLike) {
+           card.display = 'none'
+          }
+
+        const styles = {
+          cardImage:{
+               border:'1px solid #8e44ad',
+               borderTopLeftRadius:10,
+               borderTopRightRadius:10,
+               borderBottomWidth:0
+              },
+           image:{
+               borderTopLeftRadius:8,
+               borderTopRightRadius:8
+              },
+           heart:{
+               position:'absolute',
+               top:'6%', 
+               left:'80%',
+               color: heartColor
+              },
+           cardBottom:{
+               border:'1px solid #8e44ad', 
+               backgroundColor:'#f39c12',
+               borderBottomLeftRadius:10,
+               borderBottomRightRadius:10,
+               padding:10,
+               height:180
+              },
+           cardTitle:{
+              color:'#8e44ad'
+              },
+           cardText:{
+              color:'#8e44ad'
+              }
+         };
+      
+
       return(
   
             <Col lg="3" md="4" sm="6">
-               <div style={styles.card}>
+               <div style={card}>
                    <div style={styles.cardImage}>
                         <img src={this.props.MovieImg} width='100%' style={styles.image}/>
                         <FontAwesomeIcon onClick={this.handleClick} size="2x"  style={styles.heart} icon={faHeart}/>
-                        
                    </div>
                    <div style={styles.cardBottom}>
                         <h5 style={styles.cardTitle}>{this.props.MovieName}</h5>
@@ -46,43 +98,6 @@ class Movie extends Component {
     }
   }
 
-  const styles = {
-      card:
-      {
-          flex:1,
-          marginTop:20
-    },
-    cardImage:{
-         border:'1px solid #8e44ad',
-         borderTopLeftRadius:10,
-         borderTopRightRadius:10,
-         borderBottomWidth:0
-        },
-     image:{
-         borderTopLeftRadius:8
-         ,borderTopRightRadius:8
-        },
-     heart:{
-         position:'absolute',
-         top:'6%', 
-         left:'80%',
-         color:'#e74c3c'
-        },
-     cardBottom:{
-         border:'1px solid #8e44ad', 
-         backgroundColor:'#f39c12',
-         borderBottomLeftRadius:10,
-         borderBottomRightRadius:10,
-         padding:10,
-         height:180
-        },
-     cardTitle:{
-        color:'#8e44ad'
-        },
-     cardText:{
-        color:'#8e44ad'
-        }
-   };
 
   export default Movie;
   
