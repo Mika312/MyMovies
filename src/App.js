@@ -27,8 +27,56 @@ class App extends Component {
       viewOnlyLike:false,
       MoviesCount : 0,
       MovieNameList : [],
+      movies: [],
+      moviesLiked: [],
     };
   }
+
+  componentDidMount(){
+    var ctx=this
+  //  console.log("après affichage");
+   fetch('http://localhost:3000/movies')
+   .then(function(response) {
+   return response.json();
+   })
+   .then(function(movies) {
+   console.log("MOVIES ===>",movies);
+   ctx.setState({
+       movies:movies.body
+   })
+   })
+   .catch(function(error) {
+   console.log('Request failed', error)
+   });
+
+   console.log("après affichage");
+   fetch('http://localhost:3000/mymovies')
+   .then(function(response) {
+   return response.json();
+   })
+   .then(function(mymovies) {
+   console.log("MYMOVIES ===>",mymovies);
+   console.log("MYMOVIES LENGTH ===>",mymovies.movies.length);
+   var MovieNameListCopy = mymovies.movies.map((movie, i) => {
+    console.log("MAP MOVIE ===>",movie.title)
+    return movie.title;
+  });
+  console.log("MAP MOVIENAMELISTCOPY ===>",MovieNameListCopy)
+   ctx.setState({
+      moviesLiked:mymovies,
+      MoviesCount:mymovies.movies.length,
+      MovieNameList:MovieNameListCopy,
+   })
+   console.log("THIS STATE MOVIESLIKED  ===>",ctx.state.moviesLiked);
+   console.log("THIS STATE MOVIESLIKED MOVIES ===>",ctx.state.moviesLiked.movies)
+   console.log("THIS STATE MOVIENAMELIST  ===>",ctx.state.MovieNameList);
+
+   })
+   .catch(function(error) {
+   console.log('Request failed', error)
+   });
+  }
+
 
   toggle() {
     this.setState({
@@ -37,13 +85,13 @@ class App extends Component {
   }
 
 
-
 handleClickOn(){
     // console.log("click détécté on");
     this.setState ({
       viewOnlyLike:true
     })
   };
+
 
   handleClickOff(){
     // console.log("click détécté off");
@@ -84,9 +132,6 @@ handleClickOn(){
     //                     "L'Odyssée de Pi",
     //                     "Maléfique", 
     //                     "Les Aventures de Tintin",
-    //                     "L'Odyssée de Pi",
-    //                     "Maléfique", 
-    //                     "Les Aventures de Tintin",
     //                   ];
 
     // var MovieCount= MovieNameList.length;
@@ -95,67 +140,44 @@ handleClickOn(){
 
     if (this.state.MovieNameList.length === 0){
       MovieLast = "Tu n'as aucun Film preferé"
-    }else if  (this.state.MovieNameList.length <= 3){
-      MovieLast = this.state.MovieNameList.join(', ')
+    }else if (this.state.MovieNameList.length > 3){
+      MovieLast = this.state.MovieNameList.slice(-3).join(', ') + '...';
     }else{
-      MovieLast = this.state.MovieNameList.splice(-3).join(', ') + '...';
+      MovieLast = this.state.MovieNameList.join(', ')+'.';
     }
       console.log("MOVIELAST ===>",MovieLast)
 
-    var MovieData=[{name : "L'Odyssée de Pi",
-                    desc: "Après que leur bateau est victime d'une violente tempête et coule au fond du Pacifique, un adolescent et un tigre du Bengale …",
-                    img : "/pi.jpg"
-                   },
-                   {name : "Maléfique",
-                    desc: "Poussée par la vengeance et une volonté farouche de protéger les terres qu'elle préside, Maléfique place ...",
-                    img : " /malefique.jpg"
-                   },
-                   {name : "Les Aventures de Tintin",
-                    desc: "Parce qu'il achète la maquette d'un bateau appelé la Licorne, Tintin, un jeune reporter, se retrouve entraîné dans une fantastique aventure...",
-                    img : "/tintin.jpg"
-                   },
-                   {name : "L'Odyssée de Pi",
-                    desc: "Après que leur bateau est victime d'une violente tempête et coule au fond du Pacifique, un adolescent et un tigre du Bengale …",
-                    img : "/pi.jpg"
-                   },
-                   {name : "L'Odyssée de Pi",
-                    desc: "Après que leur bateau est victime d'une violente tempête et coule au fond du Pacifique, un adolescent et un tigre du Bengale …",
-                    img : "/pi.jpg"
-                   },
-                   {name : "Maléfique",
-                    desc: "Poussée par la vengeance et une volonté farouche de protéger les terres qu'elle préside, Maléfique place ...",
-                    img : " /malefique.jpg"
-                   },
-                   {name : "Les Aventures de Tintin",
-                    desc: "Parce qu'il achète la maquette d'un bateau appelé la Licorne, Tintin, un jeune reporter, se retrouve entraîné dans une fantastique aventure...",
-                    img : "/tintin.jpg"
-                   },
-                   {name : "L'Odyssée de Pi",
-                    desc: "Après que leur bateau est victime d'une violente tempête et coule au fond du Pacifique, un adolescent et un tigre du Bengale …",
-                    img : "/pi.jpg"
-                   },
-                   {name : "L'Odyssée de Pi",
-                    desc: "Après que leur bateau est victime d'une violente tempête et coule au fond du Pacifique, un adolescent et un tigre du Bengale …",
-                    img : "/pi.jpg"
-                   },
-                   {name : "Maléfique",
-                    desc: "Poussée par la vengeance et une volonté farouche de protéger les terres qu'elle préside, Maléfique place ...",
-                    img : " /malefique.jpg"
-                   },
-                   {name : "Les Aventures de Tintin",
-                    desc: "Parce qu'il achète la maquette d'un bateau appelé la Licorne, Tintin, un jeune reporter, se retrouve entraîné dans une fantastique aventure...",
-                    img : "/tintin.jpg"
-                   },
-                   {name : "L'Odyssée de Pi",
-                    desc: "Après que leur bateau est victime d'une violente tempête et coule au fond du Pacifique, un adolescent et un tigre du Bengale …",
-                    img : "/pi.jpg"
-                   },
-                  ]
+    // var MovieData=[{name : "L'Odyssée de Pi",
+    //                 desc: "Après que leur bateau est victime d'une violente tempête et coule au fond du Pacifique, un adolescent et un tigre du Bengale …",
+    //                 img : "/pi.jpg"
+    //                },
+    //                {name : "Maléfique",
+    //                 desc: "Poussée par la vengeance et une volonté farouche de protéger les terres qu'elle préside, Maléfique place ...",
+    //                 img : " /malefique.jpg"
+    //                },
+    //                {name : "Les Aventures de Tintin",
+    //                 desc: "Parce qu'il achète la maquette d'un bateau appelé la Licorne, Tintin, un jeune reporter, se retrouve entraîné dans une fantastique aventure...",
+    //                 img : "/tintin.jpg"
+    //                },
+    //                {name : "L'Odyssée de Pi",
+    //                 desc: "Après que leur bateau est victime d'une violente tempête et coule au fond du Pacifique, un adolescent et un tigre du Bengale …",
+    //                 img : "/pi.jpg"
+    //                },
+    //               ]
+
+    var MovieData= this.state.movies;
 
     var MovieList=[];
 
     for(var i = 0; i < MovieData.length; i++){
-      MovieList.push(<Movie MovieName={MovieData[i].name} MovieDesc={MovieData[i].desc} MovieImg={MovieData[i].img} displayOnlyLike={this.state.viewOnlyLike} handleClickParent={this.handleClick} key={i}/>);
+      var isLiked = false
+      for (var y = 0; y < this.state.moviesLiked.movies.length; y++) {
+        if (MovieData[i].id === this.state.moviesLiked.movies[y].idMovieDB) {
+          isLiked = true;
+          break;
+        }
+      }
+      MovieList.push(<Movie MovieName={MovieData[i].title} MovieDesc={MovieData[i].overview} MovieImg={MovieData[i].poster_path} idMovie={MovieData[i].id} displayOnlyLike={this.state.viewOnlyLike} handleClickParent={this.handleClick} movieLiked={isLiked} key={i}/>);
     }
 
     var link= {
